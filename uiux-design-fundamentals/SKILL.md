@@ -20,8 +20,11 @@ metadata:
 # UI/UX Design Fundamentals
 
 Actionable design rules for AI agents building web interfaces. Every rule maps
-directly to CSS/React implementation decisions. For CSS code patterns and
-starter templates, consult `references/css-patterns.md`.
+directly to CSS/React implementation decisions.
+
+**Reference files (load as needed):**
+- `references/css-patterns.md` — CSS custom properties, shadow scales, color ramps, button patterns, dark mode tokens, overlay code
+- `references/visual-examples.md` — Detailed before/after descriptions from the source video showing what was wrong, what changed, and why. Consult this when making design judgment calls or when you need concrete "do this / don't do this" scenarios.
 
 ---
 
