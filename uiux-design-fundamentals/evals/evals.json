@@ -1,0 +1,23 @@
+{
+  "skill_name": "uiux-design-fundamentals",
+  "evals": [
+    {
+      "id": 0,
+      "prompt": "Build me a product card component in a single HTML file with inline CSS. The card should show a food delivery order: a burrito bowl from Chipotle, priced at $32.45, delivering from Syracuse NY to Jamesville NY, scheduled for today at 9:30am. Include a food image placeholder at the top. Make it look polished and professional.",
+      "expected_output": "An HTML file with a well-designed product card that demonstrates visual hierarchy (large bold title, blue price top-right, small muted secondary text, icon-based location with connectors), proper spacing (4-point grid, 32px gaps), good typography (tight letter-spacing on heading), subtle shadow, and rounded corners.",
+      "files": []
+    },
+    {
+      "id": 1,
+      "prompt": "Create a landing page hero section as a single HTML file with inline CSS. It should be for a SaaS product called 'Breakout' that helps track deadlines. Include: a top announcement bar saying 'Introducing Smart Reminders', a big hero heading, a subtitle paragraph, a primary CTA button 'Start free trial' and a secondary ghost button 'Watch demo', and a row of trusted-by company logos. Also include a dark mode toggle that switches the whole section to dark mode. Make it look modern and clean.",
+      "expected_output": "An HTML file with a hero section demonstrating: proper type hierarchy (large heading with tight letter-spacing, smaller subtitle), 32px section gaps with 16px grouped gaps, announcement bar styling, primary+ghost button pair with correct padding ratios, dark mode with lighter surfaces and no shadows, semantic color usage, and responsive structure.",
+      "files": []
+    },
+    {
+      "id": 2,
+      "prompt": "Build a notification/toast system demo as a single HTML file with inline CSS. Show a card with a 'Copy link' button that when clicked shows a 'Copied!' confirmation chip animation. Also show a separate section with a form input that has proper focus, error, and success states — include buttons to toggle between these states. The page should have a dark background. Make it feel premium.",
+      "expected_output": "An HTML file demonstrating: micro interaction (copied chip sliding up with animation), button states (default, hover, active, disabled), input states (focus with blue border, error with red border and message, success), dark mode styling with surface elevation, proper icon sizing, ghost buttons, and smooth transitions.",
+      "files": []
+    }
+  ]
+}

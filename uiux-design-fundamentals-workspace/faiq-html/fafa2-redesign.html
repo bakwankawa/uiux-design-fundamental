@@ -1,0 +1,809 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <title>MotherDuck – Hero Rebuild (UIUX Skill Redesign)</title>
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link href="https://fonts.googleapis.com/css2?family=DM+Sans:ital,opsz,wght@0,9..40,300;0,9..40,400;0,9..40,500;0,9..40,600;0,9..40,700;1,9..40,400&display=swap" rel="stylesheet">
+  <style>
+    /* ================================================================
+       DESIGN TOKENS — derived from uiux-design-fundamentals skill
+       RULE 3.6: 4-point grid spacing
+       RULE 4.4: Landing page type scale
+       RULE 5.1-5.3: One primary color → ramp
+       RULE 7.2: Elevation-based shadows
+    ================================================================ */
+    :root {
+      /* Spacing — 4-point grid (RULE 3.6) */
+      --space-1: 4px;
+      --space-2: 8px;
+      --space-3: 12px;
+      --space-4: 16px;
+      --space-5: 20px;
+      --space-6: 24px;
+      --space-7: 28px;
+      --space-8: 32px;
+      --space-9: 36px;
+      --space-10: 40px;
+      --space-12: 48px;
+      --space-16: 64px;
+      --space-20: 80px;
+
+      /* Typography — Landing page scale (RULE 4.4) */
+      --text-h1: 64px;
+      --text-h2: 42px;
+      --text-h3: 32px;
+      --text-h4: 20px;
+      --text-h5: 16px;
+      --text-h6: 14px;
+
+      /* Primary color ramp — warm amber/orange, derived from MotherDuck brand (RULE 5.1-5.3) */
+      --primary-50:  hsl(32, 100%, 96%);
+      --primary-100: hsl(32, 95%, 90%);
+      --primary-200: hsl(32, 85%, 78%);
+      --primary-300: hsl(32, 80%, 65%);
+      --primary-400: hsl(32, 75%, 55%);
+      --primary-500: hsl(32, 70%, 48%);
+      --primary-600: hsl(32, 75%, 38%);
+      --primary-700: hsl(32, 80%, 28%);
+      --primary-800: hsl(32, 85%, 18%);
+      --primary-900: hsl(32, 90%, 10%);
+
+      /* Accent — blue for CTAs (RULE 5.4: blue = trust) */
+      --accent-50:  hsl(210, 100%, 96%);
+      --accent-100: hsl(210, 90%, 88%);
+      --accent-400: hsl(210, 80%, 55%);
+      --accent-500: hsl(210, 75%, 48%);
+      --accent-600: hsl(210, 80%, 40%);
+      --accent-700: hsl(210, 85%, 32%);
+
+      /* Semantic colors (RULE 5.4) */
+      --color-info:    #3b82f6;
+      --color-success: #22c55e;
+      --color-warning: #f59e0b;
+      --color-danger:  #ef4444;
+
+      /* Shadows — subtle, elevation-based (RULE 7.1, 7.2) */
+      --shadow-sm:  0 1px 2px rgba(0, 0, 0, 0.04);
+      --shadow-md:  0 1px 3px rgba(0, 0, 0, 0.06), 0 1px 2px rgba(0, 0, 0, 0.04);
+      --shadow-lg:  0 4px 12px rgba(0, 0, 0, 0.08);
+      --shadow-xl:  0 8px 24px rgba(0, 0, 0, 0.1);
+
+      /* Neutrals */
+      --text-primary: hsl(32, 15%, 15%);
+      --text-secondary: hsl(32, 10%, 45%);
+      --text-muted: hsl(32, 8%, 60%);
+      --bg-page: var(--primary-50);
+      --bg-card: #ffffff;
+      --border-color: hsl(32, 20%, 88%);
+
+      /* Layout */
+      --header-height: 72px;
+      --max-width: 1160px;
+
+      /* Transitions (RULE 9.5) */
+      --transition-fast: 0.15s ease;
+    }
+
+    /* ================================================================
+       GLOBAL RESET
+       RULE 4.1: One font only — DM Sans (recommended font #1)
+    ================================================================ */
+    *, *::before, *::after {
+      box-sizing: border-box;
+      margin: 0;
+      padding: 0;
+    }
+
+    html, body {
+      font-family: 'DM Sans', system-ui, -apple-system, sans-serif;
+      color: var(--text-primary);
+      background-color: var(--bg-page);
+      line-height: 1.4;
+      -webkit-font-smoothing: antialiased;
+    }
+
+    body {
+      padding-top: var(--header-height);
+    }
+
+    a {
+      text-decoration: none;
+      color: inherit;
+      transition: all var(--transition-fast);
+    }
+
+    /* ================================================================
+       HEADER
+       RULE 1.4: Nav links need hover states
+       RULE 8.2: Ghost buttons for nav
+       RULE 8.5: Button padding 2:1 ratio
+    ================================================================ */
+    .site-header {
+      position: fixed;
+      left: 0;
+      top: 0;
+      width: 100%;
+      z-index: 99;
+      background-color: var(--bg-page);
+      border-bottom: 1px solid transparent;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      height: var(--header-height);
+      transition: border-color var(--transition-fast),
+                  background-color var(--transition-fast);
+    }
+
+    .site-header.scrolled {
+      border-bottom-color: var(--border-color);
+    }
+
+    .header-inner {
+      width: 100%;
+      max-width: var(--max-width);
+      padding: 0 var(--space-8);
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+    }
+
+    /* Logo — uses primary color ramp (RULE 5.2) */
+    .logo {
+      display: inline-flex;
+      align-items: center;
+      gap: var(--space-2);
+      padding: var(--space-2) var(--space-3);
+      border-radius: var(--space-2);
+      background: var(--primary-300);
+      border: 1px solid var(--primary-400);
+      font-weight: 700;
+      font-size: var(--text-h5);
+      color: var(--primary-900);
+      transition: all var(--transition-fast);
+    }
+
+    .logo:hover {
+      background: var(--primary-200);
+      transform: translateY(-1px);
+    }
+
+    .logo-icon {
+      width: 24px;
+      height: 20px;
+      background: var(--primary-500);
+      border-radius: var(--space-1);
+      position: relative;
+    }
+
+    .logo-icon::before,
+    .logo-icon::after {
+      content: "";
+      position: absolute;
+      width: 12px;
+      height: 4px;
+      background: var(--primary-100);
+      border-radius: var(--space-2);
+      left: 4px;
+    }
+
+    .logo-icon::before { top: 4px; }
+    .logo-icon::after { bottom: 4px; }
+
+    /* Nav (RULE 8.2: ghost buttons for nav links) */
+    .nav {
+      display: flex;
+      align-items: center;
+      gap: var(--space-6);
+      font-size: var(--text-h6);
+    }
+
+    .nav-group {
+      display: flex;
+      gap: var(--space-1);
+    }
+
+    /* RULE 8.2/9.2: Nav links as ghost buttons with hover states */
+    .nav-link {
+      font-weight: 500;
+      padding: var(--space-2) var(--space-3);
+      border-radius: var(--space-2);
+      color: var(--text-secondary);
+      transition: all var(--transition-fast);
+    }
+
+    .nav-link:hover {
+      background: rgba(0, 0, 0, 0.05);
+      color: var(--text-primary);
+    }
+
+    .nav-link.dropdown::after {
+      content: "▾";
+      font-size: 10px;
+      margin-left: var(--space-1);
+      opacity: 0.5;
+    }
+
+    .nav-cta {
+      display: flex;
+      align-items: center;
+      gap: var(--space-3);
+    }
+
+    /* RULE 8.4: Primary + ghost button pair */
+    /* RULE 8.5: 2:1 padding ratio */
+    /* RULE 9.2: 4+ states (default, hover, active, disabled) */
+    .btn-outline {
+      font-size: var(--text-h6);
+      font-weight: 600;
+      padding: var(--space-2) var(--space-4);  /* 8px / 16px = 2:1 */
+      border-radius: var(--space-2);
+      border: 1px solid var(--border-color);
+      background: transparent;
+      color: var(--text-primary);
+      cursor: pointer;
+      transition: all var(--transition-fast);
+    }
+
+    .btn-outline:hover {
+      background: rgba(0, 0, 0, 0.04);
+      border-color: var(--text-secondary);
+    }
+
+    .btn-outline:active {
+      transform: translateY(1px);
+    }
+
+    .btn-primary {
+      font-size: var(--text-h6);
+      font-weight: 600;
+      padding: var(--space-3) var(--space-6);  /* 12px / 24px = 2:1 */
+      border-radius: var(--space-2);
+      border: none;
+      background: var(--accent-500);
+      color: #ffffff;
+      cursor: pointer;
+      transition: all var(--transition-fast);
+      /* RULE 7.3: Tactile button with inner + outer shadow */
+      box-shadow:
+        0 2px 4px rgba(0, 0, 0, 0.12),
+        inset 0 1px 0 rgba(255, 255, 255, 0.2);
+    }
+
+    .btn-primary:hover {
+      background: var(--accent-400);
+      box-shadow:
+        0 4px 8px rgba(0, 0, 0, 0.15),
+        inset 0 1px 0 rgba(255, 255, 255, 0.2);
+      transform: translateY(-1px);
+    }
+
+    .btn-primary:active {
+      background: var(--accent-600);
+      transform: translateY(1px);
+      box-shadow:
+        0 0 0 rgba(0, 0, 0, 0),
+        inset 0 2px 4px rgba(0, 0, 0, 0.15);
+    }
+
+    /* ================================================================
+       HERO LAYOUT
+       RULE 2.3: Most important element largest, boldest, at top
+       RULE 3.4/3.5: 32px section gaps, 16px grouped gaps
+       RULE 4.3: Negative letter-spacing on headings
+    ================================================================ */
+    .hero {
+      max-width: var(--max-width);
+      margin: 0 auto;
+      padding: var(--space-20) var(--space-8) 120px;
+      display: grid;
+      grid-template-columns: minmax(0, 1.25fr) minmax(0, 1fr);
+      gap: var(--space-12);
+      align-items: center;
+    }
+
+    .hero-text {
+      display: flex;
+      flex-direction: column;
+    }
+
+    /* Eyebrow — RULE 3.4: announcement bar = 16px/20px */
+    .hero-eyebrow {
+      font-size: var(--text-h6);
+      line-height: 20px;
+      letter-spacing: 0.08em;
+      text-transform: uppercase;
+      color: var(--accent-500);
+      font-weight: 600;
+      margin-bottom: var(--space-4);  /* 16px grouped gap to heading */
+    }
+
+    /* Hero title — RULE 4.3: letter-spacing -0.02em, line-height 1.1-1.2 */
+    /* RULE 2.3: Largest, boldest, at top */
+    .hero-title {
+      font-size: clamp(36px, 4.5vw, var(--text-h1));
+      line-height: 1.1;
+      font-weight: 700;
+      letter-spacing: -0.025em;  /* THE letter-spacing hack */
+      margin-bottom: var(--space-4);  /* 16px grouped gap to subtitle */
+      color: var(--text-primary);
+    }
+
+    .hero-title .line {
+      display: block;
+    }
+
+    /* Subtitle — RULE 2.4: secondary info smaller, muted */
+    .hero-subtitle {
+      font-size: var(--text-h4);
+      line-height: 1.5;
+      color: var(--text-secondary);
+      margin-bottom: var(--space-8);  /* 32px section gap to CTA */
+      max-width: 480px;
+    }
+
+    .hero-subtitle a {
+      color: var(--accent-500);
+      font-weight: 500;
+      border-bottom: 1px solid var(--accent-100);
+      transition: all var(--transition-fast);
+    }
+
+    .hero-subtitle a:hover {
+      border-bottom-color: var(--accent-500);
+    }
+
+    /* CTA group — RULE 8.4: primary + ghost pair */
+    .hero-actions {
+      display: flex;
+      align-items: center;
+      gap: var(--space-4);
+      margin-bottom: var(--space-4);
+    }
+
+    .hero-actions .btn-primary {
+      font-size: var(--text-h5);
+      padding: var(--space-4) var(--space-8);  /* 16px / 32px = 2:1 */
+    }
+
+    /* Ghost secondary link (RULE 8.2) */
+    .hero-secondary-link {
+      font-size: var(--text-h5);
+      font-weight: 500;
+      color: var(--text-secondary);
+      display: inline-flex;
+      align-items: center;
+      gap: var(--space-2);
+      padding: var(--space-4) var(--space-5);
+      border-radius: var(--space-2);
+      transition: all var(--transition-fast);
+    }
+
+    .hero-secondary-link:hover {
+      background: rgba(0, 0, 0, 0.04);
+      color: var(--text-primary);
+    }
+
+    .hero-secondary-link .arrow {
+      transition: transform var(--transition-fast);
+    }
+
+    .hero-secondary-link:hover .arrow {
+      transform: translateY(2px);
+    }
+
+    /* ================================================================
+       HERO ILLUSTRATION CARD
+       RULE 7.1/7.4: Subtle shadows — never the focal point
+       RULE 7.2: Card = low elevation shadow
+    ================================================================ */
+    .hero-media-wrap {
+      position: relative;
+    }
+
+    /* Bubble — RULE 7.2: low-elevation shadow */
+    .bubble {
+      position: absolute;
+      left: -24px;
+      top: var(--space-6);
+      background: var(--bg-card);
+      border-radius: var(--space-5);
+      padding: var(--space-2) var(--space-4);
+      border: 1px solid var(--border-color);
+      font-size: var(--text-h6);
+      font-weight: 600;
+      color: var(--accent-500);
+      box-shadow: var(--shadow-md);  /* subtle, not 0 10px 0 */
+      z-index: 2;
+      transition: all var(--transition-fast);
+    }
+
+    .bubble:hover {
+      box-shadow: var(--shadow-lg);
+      transform: translateY(-2px);
+    }
+
+    .bubble::after {
+      content: "";
+      position: absolute;
+      bottom: -8px;
+      left: var(--space-8);
+      border-width: 8px 8px 0 0;
+      border-style: solid;
+      border-color: var(--bg-card) transparent transparent transparent;
+      filter: drop-shadow(1px 1px 0 var(--border-color));
+    }
+
+    /* Card — RULE 7.2: subtle md shadow, not heavy flat offset */
+    .hero-media {
+      background: var(--bg-card);
+      border-radius: var(--space-3);
+      border: 1px solid var(--border-color);
+      box-shadow: var(--shadow-lg);  /* subtle, not 0 24px 0 */
+      padding: var(--space-4);
+      position: relative;
+      overflow: hidden;
+      transition: box-shadow var(--transition-fast);
+    }
+
+    .hero-media:hover {
+      box-shadow: var(--shadow-xl);
+    }
+
+    .hero-media-toolbar {
+      display: flex;
+      align-items: center;
+      gap: var(--space-2);
+      margin-bottom: var(--space-3);
+    }
+
+    .dot {
+      width: 12px;
+      height: 12px;
+      border-radius: 999px;
+    }
+    .dot.red { background: #ff6b6b; }
+    .dot.yellow { background: #ffd56b; }
+    .dot.green { background: var(--color-success); }  /* RULE 5.4: semantic green */
+
+    .hero-media-body {
+      display: grid;
+      grid-template-columns: 180px minmax(0, 1fr);
+      gap: var(--space-4);
+      align-items: stretch;
+      font-size: var(--text-h6);
+    }
+
+    /* Sidebar panel */
+    .sidebar {
+      border-radius: var(--space-2);
+      background: var(--primary-50);
+      padding: var(--space-3);
+    }
+
+    .sidebar-title {
+      font-size: 12px;
+      font-weight: 600;
+      text-transform: uppercase;
+      letter-spacing: 0.08em;
+      color: var(--text-secondary);
+      margin-bottom: var(--space-3);
+    }
+
+    .db-group {
+      margin-bottom: var(--space-2);
+    }
+
+    .db-label {
+      font-size: 12px;
+      color: var(--text-muted);
+      margin-bottom: var(--space-1);
+      font-weight: 500;
+    }
+
+    /* RULE 1.2: Selection signifier — active item has background highlight */
+    .db-item {
+      display: flex;
+      align-items: center;
+      gap: var(--space-2);
+      padding: var(--space-1) var(--space-2);
+      border-radius: var(--space-1);
+      font-size: var(--text-h6);
+      cursor: pointer;
+      transition: all var(--transition-fast);
+    }
+
+    .db-item:hover {
+      background: rgba(0, 0, 0, 0.04);
+    }
+
+    .db-item.active {
+      background: var(--bg-card);
+      box-shadow: var(--shadow-sm);
+      font-weight: 500;
+    }
+
+    .db-bullet {
+      width: 8px;
+      height: 8px;
+      border-radius: 2px;
+      background: var(--accent-400);
+      flex-shrink: 0;
+    }
+
+    /* SQL pane */
+    .sql-pane {
+      border-radius: var(--space-2);
+      background: var(--primary-50);
+      padding: var(--space-3) var(--space-4);
+      display: flex;
+      flex-direction: column;
+      justify-content: space-between;
+      min-height: 160px;
+    }
+
+    .sql-header {
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+      margin-bottom: var(--space-3);
+      font-size: 12px;
+      font-weight: 500;
+      color: var(--text-secondary);
+    }
+
+    .sql-window {
+      background: var(--bg-card);
+      border-radius: var(--space-2);
+      border: 1px solid var(--border-color);
+      padding: var(--space-3) var(--space-4);
+      font-family: 'DM Sans', monospace;  /* RULE 4.1: one font */
+      font-size: var(--text-h6);
+      position: relative;
+      color: var(--text-primary);
+    }
+
+    .sql-keyword {
+      color: var(--accent-500);
+      font-weight: 600;
+    }
+
+    /* Play button — RULE 9.2: hover + active states */
+    .play-button {
+      position: absolute;
+      right: var(--space-4);
+      bottom: var(--space-3);
+      width: 40px;
+      height: 40px;
+      border-radius: 999px;
+      background: var(--bg-card);
+      border: 1px solid var(--border-color);
+      box-shadow: var(--shadow-md);
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      cursor: pointer;
+      transition: all var(--transition-fast);
+    }
+
+    .play-button:hover {
+      box-shadow: var(--shadow-lg);
+      transform: translateY(-1px);
+      border-color: var(--accent-400);
+    }
+
+    .play-button:active {
+      transform: translateY(1px);
+      box-shadow: var(--shadow-sm);
+    }
+
+    .play-button::after {
+      content: "";
+      border-style: solid;
+      border-width: 6px 0 6px 10px;
+      border-color: transparent transparent transparent var(--accent-500);
+      margin-left: 2px;
+    }
+
+    /* Decorative shapes — using primary ramp colors (RULE 5.2) */
+    .shape {
+      position: absolute;
+      border-radius: 999px;
+    }
+
+    .shape.circle-x {
+      width: 28px;
+      height: 28px;
+      border-radius: 50%;
+      border: 3px solid var(--color-danger);  /* RULE 5.4: semantic red */
+      right: 100%;
+      bottom: 12%;
+      transform: translateX(-40px);
+    }
+
+    .shape.circle-x::before,
+    .shape.circle-x::after {
+      content: "";
+      position: absolute;
+      top: 4px;
+      left: 10px;
+      width: 3px;
+      height: 16px;
+      background: var(--color-danger);
+      border-radius: 2px;
+    }
+    .shape.circle-x::before { transform: rotate(45deg); }
+    .shape.circle-x::after { transform: rotate(-45deg); }
+
+    .shape.pill {
+      width: 40px;
+      height: 24px;
+      background: var(--color-success);  /* RULE 5.4: semantic green */
+      right: -28px;
+      top: 16%;
+      border-radius: 60px;
+      transform: skewX(-16deg);
+      box-shadow: var(--shadow-md);
+    }
+
+    /* ================================================================
+       RESPONSIVE
+    ================================================================ */
+    @media (max-width: 900px) {
+      :root {
+        --header-height: 64px;
+      }
+
+      .header-inner {
+        padding: 0 var(--space-4);
+      }
+
+      .nav-group {
+        display: none;
+      }
+
+      .nav-cta {
+        gap: var(--space-2);
+      }
+
+      .hero {
+        grid-template-columns: minmax(0, 1fr);
+        padding: var(--space-12) var(--space-4) var(--space-16);
+      }
+
+      .hero-media-wrap {
+        order: -1;
+      }
+
+      .bubble {
+        left: var(--space-2);
+      }
+
+      .hero-title {
+        font-size: clamp(32px, 8vw, 48px);
+      }
+    }
+  </style>
+</head>
+<body>
+  <!-- Header -->
+  <header class="site-header">
+    <div class="header-inner">
+      <a href="#" class="logo">
+        <span class="logo-icon"></span>
+        <span>MotherDuck</span>
+      </a>
+
+      <nav class="nav">
+        <div class="nav-group">
+          <a href="#" class="nav-link dropdown">Product</a>
+          <a href="#" class="nav-link">Community</a>
+          <a href="#" class="nav-link dropdown">Company</a>
+          <a href="#" class="nav-link">Docs</a>
+          <a href="#" class="nav-link">Pricing</a>
+          <a href="#" class="nav-link">Contact</a>
+        </div>
+        <div class="nav-cta">
+          <a href="#" class="btn-outline">Log in</a>
+          <a href="#" class="btn-primary">Start free</a>
+        </div>
+      </nav>
+    </div>
+  </header>
+
+  <!-- Hero -->
+  <main class="hero">
+    <section class="hero-text">
+      <!-- RULE 3.5: 16px gap eyebrow→title (grouped), 32px gap subtitle→CTA (section) -->
+      <div class="hero-eyebrow">Cloud SQL Analytics</div>
+
+      <!-- RULE 4.3: -0.025em letter-spacing, 1.1 line-height -->
+      <!-- RULE 2.3: Largest, boldest text at top -->
+      <h1 class="hero-title">
+        <span class="line">Cloud SQL analytics</span>
+        <span class="line">without the overhead</span>
+      </h1>
+
+      <!-- RULE 2.4: Secondary info smaller, muted color -->
+      <p class="hero-subtitle">
+        <a href="#">Data warehouses</a> and <a href="#">interactive apps</a>
+        powered by <a href="#">DuckDB</a> — scale from laptop to cloud
+        without changing a line of code.
+      </p>
+
+      <!-- RULE 8.4: Primary + ghost button pair -->
+      <div class="hero-actions">
+        <a href="#" class="btn-primary">Get started</a>
+        <a href="#" class="hero-secondary-link">
+          <span>Learn more</span>
+          <span class="arrow">↓</span>
+        </a>
+      </div>
+    </section>
+
+    <aside class="hero-media-wrap">
+      <div class="bubble">Watch the demo</div>
+
+      <div class="hero-media">
+        <div class="hero-media-toolbar">
+          <span class="dot red"></span>
+          <span class="dot yellow"></span>
+          <span class="dot green"></span>
+        </div>
+
+        <div class="hero-media-body">
+          <div class="sidebar">
+            <div class="sidebar-title">My Databases</div>
+
+            <div class="db-group">
+              <div class="db-label">cloud_ducks</div>
+              <!-- RULE 1.2: Active item has selection signifier -->
+              <div class="db-item active">
+                <span class="db-bullet"></span>
+                <span>famous_ducks</span>
+              </div>
+              <div class="db-item">
+                <span class="db-bullet"></span>
+                <span>quacks</span>
+              </div>
+            </div>
+
+            <div class="db-group">
+              <div class="db-label">my_db</div>
+              <div class="db-item">
+                <span class="db-bullet"></span>
+                <span>events</span>
+              </div>
+            </div>
+          </div>
+
+          <div class="sql-pane">
+            <div class="sql-header">
+              <span>Run</span>
+              <span>DuckDB · SQL</span>
+            </div>
+
+            <div class="sql-window">
+              <span class="sql-keyword">FROM</span> cloud_ducks.famous_ducks;
+              <div class="play-button"></div>
+            </div>
+          </div>
+        </div>
+
+        <div class="shape circle-x"></div>
+        <div class="shape pill"></div>
+      </div>
+    </aside>
+  </main>
+
+  <script>
+    // Header scroll border (micro-feedback — RULE 9.1)
+    const header = document.querySelector('.site-header');
+    window.addEventListener('scroll', () => {
+      header.classList.toggle('scrolled', window.scrollY > 8);
+    });
+  </script>
+</body>
+</html>

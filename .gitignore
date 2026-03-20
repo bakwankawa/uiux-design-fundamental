@@ -1,0 +1,12 @@
+# Ignore large video file
+*.mp4
+
+# Ignore generated review viewer
+uiux-design-fundamentals-workspace/iteration-*/review.html
+
+# Ignore unrelated workspace projects
+uiux-design-fundamentals-workspace/supplAI/
+**/node_modules/
+
+# Claude project config
+.claude/

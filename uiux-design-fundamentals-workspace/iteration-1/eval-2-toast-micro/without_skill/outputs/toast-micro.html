@@ -1,0 +1,748 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Toast &amp; Micro-interaction Demo</title>
+  <style>
+    /* ── Reset & Base ───────────────────────────────────── */
+    *, *::before, *::after {
+      box-sizing: border-box;
+      margin: 0;
+      padding: 0;
+    }
+
+    :root {
+      --bg: #0c0c0f;
+      --surface: #16161a;
+      --surface-raised: #1e1e24;
+      --surface-hover: #26262e;
+      --border: rgba(255, 255, 255, 0.06);
+      --border-focus: #6c5ce7;
+      --border-error: #ff6b6b;
+      --border-success: #51cf66;
+      --text-primary: #e8e6f0;
+      --text-secondary: #8b8a94;
+      --text-muted: #5c5b66;
+      --accent: #6c5ce7;
+      --accent-glow: rgba(108, 92, 231, 0.25);
+      --success: #51cf66;
+      --success-glow: rgba(81, 207, 102, 0.2);
+      --error: #ff6b6b;
+      --error-glow: rgba(255, 107, 107, 0.2);
+      --radius: 12px;
+      --radius-sm: 8px;
+      --radius-pill: 100px;
+      --transition: 0.2s cubic-bezier(0.4, 0, 0.2, 1);
+      --shadow-lg: 0 8px 32px rgba(0, 0, 0, 0.4), 0 2px 8px rgba(0, 0, 0, 0.3);
+      --shadow-glow: 0 0 20px var(--accent-glow);
+    }
+
+    body {
+      font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', 'Inter', Roboto, sans-serif;
+      background: var(--bg);
+      color: var(--text-primary);
+      min-height: 100vh;
+      display: flex;
+      flex-direction: column;
+      align-items: center;
+      padding: 60px 24px;
+      -webkit-font-smoothing: antialiased;
+      -moz-osx-font-smoothing: grayscale;
+    }
+
+    /* ── Page Header ────────────────────────────────────── */
+    .page-header {
+      text-align: center;
+      margin-bottom: 60px;
+    }
+
+    .page-header h1 {
+      font-size: 1.75rem;
+      font-weight: 700;
+      letter-spacing: -0.03em;
+      background: linear-gradient(135deg, #e8e6f0 0%, #a29bdb 100%);
+      -webkit-background-clip: text;
+      -webkit-text-fill-color: transparent;
+      background-clip: text;
+      margin-bottom: 8px;
+    }
+
+    .page-header p {
+      font-size: 0.9rem;
+      color: var(--text-secondary);
+      font-weight: 400;
+    }
+
+    /* ── Section Layout ─────────────────────────────────── */
+    .demo-grid {
+      display: flex;
+      flex-direction: column;
+      gap: 48px;
+      width: 100%;
+      max-width: 520px;
+    }
+
+    .section-label {
+      font-size: 0.7rem;
+      font-weight: 600;
+      text-transform: uppercase;
+      letter-spacing: 0.12em;
+      color: var(--text-muted);
+      margin-bottom: 16px;
+    }
+
+    /* ── Card: Copy Link ────────────────────────────────── */
+    .link-card {
+      background: var(--surface);
+      border: 1px solid var(--border);
+      border-radius: var(--radius);
+      padding: 20px;
+      display: flex;
+      align-items: center;
+      gap: 14px;
+      box-shadow: var(--shadow-lg);
+      position: relative;
+      overflow: visible;
+    }
+
+    .link-icon {
+      width: 40px;
+      height: 40px;
+      border-radius: var(--radius-sm);
+      background: linear-gradient(135deg, var(--accent), #8b7cf7);
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      flex-shrink: 0;
+    }
+
+    .link-icon svg {
+      width: 18px;
+      height: 18px;
+      stroke: #fff;
+      stroke-width: 2;
+      fill: none;
+    }
+
+    .link-info {
+      flex: 1;
+      min-width: 0;
+    }
+
+    .link-title {
+      font-size: 0.9rem;
+      font-weight: 600;
+      color: var(--text-primary);
+      margin-bottom: 2px;
+    }
+
+    .link-url {
+      font-size: 0.78rem;
+      color: var(--text-secondary);
+      white-space: nowrap;
+      overflow: hidden;
+      text-overflow: ellipsis;
+    }
+
+    .copy-btn {
+      position: relative;
+      background: var(--surface-raised);
+      border: 1px solid var(--border);
+      color: var(--text-primary);
+      font-size: 0.8rem;
+      font-weight: 500;
+      padding: 8px 16px;
+      border-radius: var(--radius-sm);
+      cursor: pointer;
+      transition: all var(--transition);
+      white-space: nowrap;
+      display: flex;
+      align-items: center;
+      gap: 6px;
+      flex-shrink: 0;
+      overflow: hidden;
+    }
+
+    .copy-btn:hover {
+      background: var(--surface-hover);
+      border-color: rgba(255, 255, 255, 0.1);
+    }
+
+    .copy-btn:active {
+      transform: scale(0.97);
+    }
+
+    .copy-btn svg {
+      width: 14px;
+      height: 14px;
+      stroke: currentColor;
+      stroke-width: 2;
+      fill: none;
+      transition: all var(--transition);
+    }
+
+    .copy-btn .btn-text {
+      transition: opacity 0.15s ease, transform 0.15s ease;
+    }
+
+    .copy-btn.copied {
+      background: rgba(81, 207, 102, 0.1);
+      border-color: rgba(81, 207, 102, 0.25);
+      color: var(--success);
+    }
+
+    .copy-btn.copied svg {
+      stroke: var(--success);
+    }
+
+    /* ── Toast ──────────────────────────────────────────── */
+    .toast-container {
+      position: fixed;
+      bottom: 32px;
+      left: 50%;
+      transform: translateX(-50%);
+      z-index: 1000;
+      pointer-events: none;
+    }
+
+    .toast {
+      background: var(--surface-raised);
+      border: 1px solid rgba(255, 255, 255, 0.08);
+      border-radius: var(--radius-pill);
+      padding: 10px 20px;
+      display: flex;
+      align-items: center;
+      gap: 8px;
+      box-shadow: 0 12px 40px rgba(0, 0, 0, 0.5), 0 0 0 1px rgba(255, 255, 255, 0.04);
+      backdrop-filter: blur(20px);
+      -webkit-backdrop-filter: blur(20px);
+      opacity: 0;
+      transform: translateY(16px) scale(0.92);
+      transition: all 0.4s cubic-bezier(0.16, 1, 0.3, 1);
+      pointer-events: auto;
+    }
+
+    .toast.visible {
+      opacity: 1;
+      transform: translateY(0) scale(1);
+    }
+
+    .toast-icon {
+      width: 20px;
+      height: 20px;
+      border-radius: 50%;
+      background: rgba(81, 207, 102, 0.15);
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      flex-shrink: 0;
+    }
+
+    .toast-icon svg {
+      width: 12px;
+      height: 12px;
+      stroke: var(--success);
+      stroke-width: 2.5;
+      fill: none;
+    }
+
+    .toast-message {
+      font-size: 0.82rem;
+      font-weight: 500;
+      color: var(--text-primary);
+    }
+
+    /* ── Confirmation Chip (on button) ──────────────────── */
+    .confirm-chip {
+      position: absolute;
+      top: -8px;
+      right: -4px;
+      background: var(--success);
+      color: #0c0c0f;
+      font-size: 0.65rem;
+      font-weight: 700;
+      padding: 2px 8px;
+      border-radius: var(--radius-pill);
+      opacity: 0;
+      transform: translateY(4px) scale(0.8);
+      transition: all 0.35s cubic-bezier(0.16, 1, 0.3, 1);
+      pointer-events: none;
+      box-shadow: 0 2px 12px var(--success-glow);
+    }
+
+    .confirm-chip.show {
+      opacity: 1;
+      transform: translateY(0) scale(1);
+    }
+
+    /* ── Form Section ───────────────────────────────────── */
+    .form-card {
+      background: var(--surface);
+      border: 1px solid var(--border);
+      border-radius: var(--radius);
+      padding: 28px;
+      box-shadow: var(--shadow-lg);
+    }
+
+    .form-group {
+      margin-bottom: 20px;
+    }
+
+    .form-label {
+      display: block;
+      font-size: 0.8rem;
+      font-weight: 500;
+      color: var(--text-secondary);
+      margin-bottom: 8px;
+    }
+
+    .input-wrapper {
+      position: relative;
+    }
+
+    .form-input {
+      width: 100%;
+      background: var(--bg);
+      border: 1.5px solid var(--border);
+      border-radius: var(--radius-sm);
+      padding: 12px 14px;
+      font-size: 0.88rem;
+      font-family: inherit;
+      color: var(--text-primary);
+      transition: all var(--transition);
+      outline: none;
+    }
+
+    .form-input::placeholder {
+      color: var(--text-muted);
+    }
+
+    /* Default/Idle state */
+    .form-input:focus {
+      border-color: var(--border-focus);
+      box-shadow: 0 0 0 3px var(--accent-glow), var(--shadow-glow);
+    }
+
+    /* Error state */
+    .form-input.input-error {
+      border-color: var(--border-error);
+      box-shadow: 0 0 0 3px var(--error-glow);
+    }
+
+    .form-input.input-error:focus {
+      border-color: var(--border-error);
+      box-shadow: 0 0 0 3px var(--error-glow);
+    }
+
+    /* Success state */
+    .form-input.input-success {
+      border-color: var(--border-success);
+      box-shadow: 0 0 0 3px var(--success-glow);
+    }
+
+    .form-input.input-success:focus {
+      border-color: var(--border-success);
+      box-shadow: 0 0 0 3px var(--success-glow);
+    }
+
+    /* State indicator icon */
+    .state-indicator {
+      position: absolute;
+      right: 12px;
+      top: 50%;
+      transform: translateY(-50%);
+      width: 20px;
+      height: 20px;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      opacity: 0;
+      transition: all 0.3s cubic-bezier(0.16, 1, 0.3, 1);
+      transform-origin: center;
+    }
+
+    .state-indicator.visible {
+      opacity: 1;
+    }
+
+    .state-indicator svg {
+      width: 16px;
+      height: 16px;
+      stroke-width: 2;
+      fill: none;
+    }
+
+    .state-indicator.error-icon svg {
+      stroke: var(--error);
+    }
+
+    .state-indicator.success-icon svg {
+      stroke: var(--success);
+    }
+
+    /* Helper text */
+    .helper-text {
+      font-size: 0.75rem;
+      margin-top: 8px;
+      opacity: 0;
+      transform: translateY(-4px);
+      transition: all 0.25s cubic-bezier(0.16, 1, 0.3, 1);
+      height: 0;
+      overflow: hidden;
+    }
+
+    .helper-text.visible {
+      opacity: 1;
+      transform: translateY(0);
+      height: auto;
+    }
+
+    .helper-text.error-text {
+      color: var(--error);
+    }
+
+    .helper-text.success-text {
+      color: var(--success);
+    }
+
+    /* ── State Toggle Buttons ───────────────────────────── */
+    .state-toggles {
+      display: flex;
+      gap: 8px;
+      flex-wrap: wrap;
+    }
+
+    .toggle-btn {
+      background: var(--surface-raised);
+      border: 1px solid var(--border);
+      color: var(--text-secondary);
+      font-size: 0.75rem;
+      font-weight: 500;
+      font-family: inherit;
+      padding: 8px 14px;
+      border-radius: var(--radius-pill);
+      cursor: pointer;
+      transition: all var(--transition);
+      display: flex;
+      align-items: center;
+      gap: 6px;
+    }
+
+    .toggle-btn:hover {
+      background: var(--surface-hover);
+      color: var(--text-primary);
+    }
+
+    .toggle-btn:active {
+      transform: scale(0.96);
+    }
+
+    .toggle-btn.active {
+      color: var(--text-primary);
+    }
+
+    .toggle-btn.active-focus {
+      background: rgba(108, 92, 231, 0.12);
+      border-color: rgba(108, 92, 231, 0.3);
+      color: #a29bdb;
+    }
+
+    .toggle-btn.active-error {
+      background: rgba(255, 107, 107, 0.1);
+      border-color: rgba(255, 107, 107, 0.25);
+      color: var(--error);
+    }
+
+    .toggle-btn.active-success {
+      background: rgba(81, 207, 102, 0.1);
+      border-color: rgba(81, 207, 102, 0.25);
+      color: var(--success);
+    }
+
+    .toggle-dot {
+      width: 6px;
+      height: 6px;
+      border-radius: 50%;
+      background: currentColor;
+      opacity: 0.6;
+    }
+
+    /* ── Pulse ring for focus ───────────────────────────── */
+    @keyframes pulse-ring {
+      0% { box-shadow: 0 0 0 0 var(--accent-glow); }
+      70% { box-shadow: 0 0 0 6px transparent; }
+      100% { box-shadow: 0 0 0 0 transparent; }
+    }
+
+    .form-input.input-focus-demo {
+      border-color: var(--border-focus);
+      box-shadow: 0 0 0 3px var(--accent-glow), var(--shadow-glow);
+      animation: pulse-ring 2s ease-out infinite;
+    }
+
+    /* ── Shake animation for error ──────────────────────── */
+    @keyframes shake {
+      0%, 100% { transform: translateX(0); }
+      20% { transform: translateX(-4px); }
+      40% { transform: translateX(4px); }
+      60% { transform: translateX(-3px); }
+      80% { transform: translateX(2px); }
+    }
+
+    .shake {
+      animation: shake 0.4s ease-out;
+    }
+
+    /* ── Pop animation for success icon ─────────────────── */
+    @keyframes pop-in {
+      0% { transform: translateY(-50%) scale(0); opacity: 0; }
+      50% { transform: translateY(-50%) scale(1.15); }
+      100% { transform: translateY(-50%) scale(1); opacity: 1; }
+    }
+
+    .state-indicator.pop {
+      animation: pop-in 0.35s cubic-bezier(0.16, 1, 0.3, 1) forwards;
+    }
+
+    /* ── Divider ────────────────────────────────────────── */
+    .divider {
+      width: 40px;
+      height: 2px;
+      background: var(--border);
+      border-radius: 1px;
+      margin: 0 auto;
+    }
+  </style>
+</head>
+<body>
+
+  <!-- Page Header -->
+  <header class="page-header">
+    <h1>Toast &amp; Micro-interactions</h1>
+    <p>Notification patterns &amp; input state feedback</p>
+  </header>
+
+  <main class="demo-grid">
+
+    <!-- ── Section 1: Copy Link Card ───────────────────── -->
+    <section>
+      <div class="section-label">Toast / Confirmation Chip</div>
+      <div class="link-card">
+        <div class="link-icon">
+          <svg viewBox="0 0 24 24" stroke-linecap="round" stroke-linejoin="round">
+            <path d="M10 13a5 5 0 0 0 7.54.54l3-3a5 5 0 0 0-7.07-7.07l-1.72 1.71"/>
+            <path d="M14 11a5 5 0 0 0-7.54-.54l-3 3a5 5 0 0 0 7.07 7.07l1.71-1.71"/>
+          </svg>
+        </div>
+        <div class="link-info">
+          <div class="link-title">Project Dashboard</div>
+          <div class="link-url">https://app.example.com/projects/dashboard</div>
+        </div>
+        <button class="copy-btn" id="copyBtn" onclick="handleCopy()">
+          <!-- Copy icon -->
+          <svg class="icon-copy" viewBox="0 0 24 24" stroke-linecap="round" stroke-linejoin="round">
+            <rect x="9" y="9" width="13" height="13" rx="2" ry="2"/>
+            <path d="M5 15H4a2 2 0 0 1-2-2V4a2 2 0 0 1 2-2h9a2 2 0 0 1 2 2v1"/>
+          </svg>
+          <!-- Check icon (hidden by default) -->
+          <svg class="icon-check" viewBox="0 0 24 24" stroke-linecap="round" stroke-linejoin="round" style="display:none">
+            <polyline points="20 6 9 17 4 12"/>
+          </svg>
+          <span class="btn-text">Copy link</span>
+          <span class="confirm-chip" id="confirmChip">Copied!</span>
+        </button>
+      </div>
+    </section>
+
+    <div class="divider"></div>
+
+    <!-- ── Section 2: Form Input States ────────────────── -->
+    <section>
+      <div class="section-label">Input States</div>
+      <div class="form-card">
+        <div class="form-group">
+          <label class="form-label" for="emailInput">Email address</label>
+          <div class="input-wrapper">
+            <input
+              type="email"
+              id="emailInput"
+              class="form-input"
+              placeholder="you@example.com"
+              autocomplete="off"
+            />
+            <!-- Error indicator -->
+            <span class="state-indicator error-icon" id="errorIcon">
+              <svg viewBox="0 0 24 24" stroke-linecap="round" stroke-linejoin="round">
+                <circle cx="12" cy="12" r="10"/>
+                <line x1="15" y1="9" x2="9" y2="15"/>
+                <line x1="9" y1="9" x2="15" y2="15"/>
+              </svg>
+            </span>
+            <!-- Success indicator -->
+            <span class="state-indicator success-icon" id="successIcon">
+              <svg viewBox="0 0 24 24" stroke-linecap="round" stroke-linejoin="round">
+                <path d="M22 11.08V12a10 10 0 1 1-5.93-9.14"/>
+                <polyline points="22 4 12 14.01 9 11.01"/>
+              </svg>
+            </span>
+          </div>
+          <div class="helper-text error-text" id="errorText">Please enter a valid email address.</div>
+          <div class="helper-text success-text" id="successText">Looks good! Email is valid.</div>
+        </div>
+
+        <div class="state-toggles">
+          <button class="toggle-btn" id="btnDefault" onclick="setInputState('default')">
+            <span class="toggle-dot"></span> Default
+          </button>
+          <button class="toggle-btn" id="btnFocus" onclick="setInputState('focus')">
+            <span class="toggle-dot"></span> Focus
+          </button>
+          <button class="toggle-btn" id="btnError" onclick="setInputState('error')">
+            <span class="toggle-dot"></span> Error
+          </button>
+          <button class="toggle-btn" id="btnSuccess" onclick="setInputState('success')">
+            <span class="toggle-dot"></span> Success
+          </button>
+        </div>
+      </div>
+    </section>
+
+  </main>
+
+  <!-- ── Toast ─────────────────────────────────────────── -->
+  <div class="toast-container">
+    <div class="toast" id="toast">
+      <span class="toast-icon">
+        <svg viewBox="0 0 24 24" stroke-linecap="round" stroke-linejoin="round">
+          <polyline points="20 6 9 17 4 12"/>
+        </svg>
+      </span>
+      <span class="toast-message">Link copied to clipboard</span>
+    </div>
+  </div>
+
+  <script>
+    /* ── Copy Link Handler ─────────────────────────────── */
+    let copyTimeout = null;
+
+    function handleCopy() {
+      const btn = document.getElementById('copyBtn');
+      const chip = document.getElementById('confirmChip');
+      const toast = document.getElementById('toast');
+      const iconCopy = btn.querySelector('.icon-copy');
+      const iconCheck = btn.querySelector('.icon-check');
+      const btnText = btn.querySelector('.btn-text');
+
+      // Prevent rapid re-triggers
+      if (btn.classList.contains('copied')) return;
+
+      // Copy to clipboard (graceful fallback)
+      navigator.clipboard.writeText('https://app.example.com/projects/dashboard').catch(() => {});
+
+      // Swap icon
+      iconCopy.style.display = 'none';
+      iconCheck.style.display = 'block';
+      btnText.textContent = 'Copied!';
+      btn.classList.add('copied');
+
+      // Show confirmation chip
+      requestAnimationFrame(() => {
+        chip.classList.add('show');
+      });
+
+      // Show toast
+      requestAnimationFrame(() => {
+        toast.classList.add('visible');
+      });
+
+      // Reset after delay
+      clearTimeout(copyTimeout);
+      copyTimeout = setTimeout(() => {
+        chip.classList.remove('show');
+        toast.classList.remove('visible');
+
+        setTimeout(() => {
+          iconCopy.style.display = 'block';
+          iconCheck.style.display = 'none';
+          btnText.textContent = 'Copy link';
+          btn.classList.remove('copied');
+        }, 300);
+      }, 2200);
+    }
+
+    /* ── Input State Handler ───────────────────────────── */
+    let currentState = 'default';
+
+    function setInputState(state) {
+      const input = document.getElementById('emailInput');
+      const errorIcon = document.getElementById('errorIcon');
+      const successIcon = document.getElementById('successIcon');
+      const errorText = document.getElementById('errorText');
+      const successText = document.getElementById('successText');
+      const wrapper = input.closest('.input-wrapper');
+
+      // Reset all toggle buttons
+      document.querySelectorAll('.toggle-btn').forEach(b => {
+        b.className = 'toggle-btn';
+      });
+
+      // Reset input
+      input.className = 'form-input';
+      input.classList.remove('shake');
+      errorIcon.className = 'state-indicator error-icon';
+      successIcon.className = 'state-indicator success-icon';
+      errorText.classList.remove('visible');
+      successText.classList.remove('visible');
+
+      currentState = state;
+
+      switch (state) {
+        case 'default':
+          document.getElementById('btnDefault').classList.add('active');
+          input.value = '';
+          input.placeholder = 'you@example.com';
+          input.blur();
+          break;
+
+        case 'focus':
+          document.getElementById('btnFocus').classList.add('active', 'active-focus');
+          input.value = '';
+          input.placeholder = 'you@example.com';
+          input.classList.add('input-focus-demo');
+          input.focus();
+          break;
+
+        case 'error':
+          document.getElementById('btnError').classList.add('active', 'active-error');
+          input.value = 'invalid-email';
+          input.classList.add('input-error');
+          // Trigger shake
+          void input.offsetWidth; // force reflow
+          input.classList.add('shake');
+          // Show error icon with pop
+          requestAnimationFrame(() => {
+            errorIcon.classList.add('visible', 'pop');
+            errorText.classList.add('visible');
+          });
+          break;
+
+        case 'success':
+          document.getElementById('btnSuccess').classList.add('active', 'active-success');
+          input.value = 'hello@example.com';
+          input.classList.add('input-success');
+          // Show success icon with pop
+          requestAnimationFrame(() => {
+            successIcon.classList.add('visible', 'pop');
+            successText.classList.add('visible');
+          });
+          break;
+      }
+    }
+
+    // Set initial active state for Default button
+    document.getElementById('btnDefault').classList.add('active');
+  </script>
+
+</body>
+</html>

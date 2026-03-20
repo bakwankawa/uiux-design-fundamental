@@ -1,0 +1,696 @@
+<!DOCTYPE html>
+<html lang="en" data-theme="light">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Breakout - Track Deadlines, Get Paid</title>
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link href="https://fonts.googleapis.com/css2?family=DM+Sans:ital,opsz,wght@0,9..40,300;0,9..40,400;0,9..40,500;0,9..40,600;0,9..40,700&display=swap" rel="stylesheet">
+  <style>
+    /* =============================================
+       CSS CUSTOM PROPERTIES — SKILL RULES 3.4, 3.6, 4.4, 5.1-5.3, 7.1-7.2
+       4-point grid spacing, landing page type scale,
+       primary color ramp, shadow elevation scale
+       ============================================= */
+    :root {
+      /* Spacing — 4-point grid (RULE 3.6) */
+      --space-1: 4px;
+      --space-2: 8px;
+      --space-3: 12px;
+      --space-4: 16px;
+      --space-5: 20px;
+      --space-6: 24px;
+      --space-7: 28px;
+      --space-8: 32px;
+      --space-9: 36px;
+      --space-10: 40px;
+
+      /* Typography — Landing page scale (RULE 4.4) */
+      --text-h1: 64px;
+      --text-h2: 42px;
+      --text-h3: 32px;
+      --text-h4: 20px;
+      --text-h5: 16px;
+      --text-h6: 14px;
+
+      /* Primary color ramp — blue-violet (RULE 5.1, 5.2, 5.3) */
+      --primary-50:  hsl(250, 80%, 97%);
+      --primary-100: hsl(250, 70%, 92%);
+      --primary-200: hsl(250, 65%, 82%);
+      --primary-300: hsl(250, 60%, 72%);
+      --primary-400: hsl(250, 55%, 60%);
+      --primary-500: hsl(250, 55%, 52%);
+      --primary-600: hsl(250, 58%, 44%);
+      --primary-700: hsl(250, 62%, 36%);
+      --primary-800: hsl(250, 65%, 26%);
+      --primary-900: hsl(250, 70%, 16%);
+
+      /* Semantic colors (RULE 5.4) */
+      --color-info:    #3b82f6;
+      --color-danger:  #ef4444;
+      --color-warning: #f59e0b;
+      --color-success: #22c55e;
+
+      /* Shadows — elevation scale (RULE 7.2) */
+      --shadow-sm:  0 1px 2px rgba(0, 0, 0, 0.04);
+      --shadow-md:  0 1px 3px rgba(0, 0, 0, 0.06), 0 1px 2px rgba(0, 0, 0, 0.04);
+      --shadow-lg:  0 4px 12px rgba(0, 0, 0, 0.08);
+      --shadow-xl:  0 8px 30px rgba(0, 0, 0, 0.12);
+
+      /* Transitions (RULE 9.5) */
+      --transition-fast: 0.15s ease;
+
+      /* Light mode surfaces */
+      --surface-bg: #ffffff;
+      --surface-card: #f8f8fa;
+      --text-primary: #111118;
+      --text-secondary: #64648c;
+      --text-muted: #9494b0;
+      --border-color: rgba(0, 0, 0, 0.08);
+      --announcement-bg: var(--primary-50);
+      --announcement-text: var(--primary-700);
+      --announcement-dot: var(--primary-500);
+      --btn-primary-bg: var(--primary-500);
+      --btn-primary-hover: var(--primary-600);
+      --btn-primary-active: var(--primary-700);
+      --btn-primary-text: #ffffff;
+      --btn-ghost-bg: transparent;
+      --btn-ghost-hover: rgba(0, 0, 0, 0.05);
+      --btn-ghost-text: var(--text-primary);
+      --btn-ghost-border: rgba(0, 0, 0, 0.15);
+      --logo-opacity: 0.4;
+      --logo-hover-opacity: 0.6;
+      --toggle-bg: #e4e4ec;
+      --toggle-knob: #ffffff;
+    }
+
+    /* =============================================
+       DARK MODE — RULE 6.1, 6.2, 6.3, 6.4
+       Elevation through lightness, lower border contrast,
+       desaturated accents
+       ============================================= */
+    [data-theme="dark"] {
+      --surface-bg: #0f0f14;
+      --surface-card: #1a1a24;
+      --text-primary: #f0f0f4;
+      --text-secondary: #9494b0;
+      --text-muted: #64648c;
+      --border-color: rgba(255, 255, 255, 0.08);
+      --announcement-bg: hsl(250, 30%, 14%);
+      --announcement-text: hsl(250, 60%, 76%);
+      --announcement-dot: hsl(250, 50%, 60%);
+      --btn-primary-bg: hsl(250, 50%, 56%);
+      --btn-primary-hover: hsl(250, 50%, 62%);
+      --btn-primary-active: hsl(250, 50%, 48%);
+      --btn-primary-text: #ffffff;
+      --btn-ghost-bg: transparent;
+      --btn-ghost-hover: rgba(255, 255, 255, 0.06);
+      --btn-ghost-text: var(--text-primary);
+      --btn-ghost-border: rgba(255, 255, 255, 0.12);
+      --logo-opacity: 0.35;
+      --logo-hover-opacity: 0.55;
+      --toggle-bg: #2a2a3e;
+      --toggle-knob: #f0f0f4;
+
+      /* Shadows have no effect in dark mode (RULE 6.2) */
+      --shadow-sm: none;
+      --shadow-md: none;
+      --shadow-lg: none;
+      --shadow-xl: none;
+    }
+
+    /* =============================================
+       RESET & BASE — RULE 4.1 (one font only)
+       ============================================= */
+    *, *::before, *::after {
+      margin: 0;
+      padding: 0;
+      box-sizing: border-box;
+    }
+
+    body {
+      font-family: 'DM Sans', system-ui, sans-serif;
+      background: var(--surface-bg);
+      color: var(--text-primary);
+      -webkit-font-smoothing: antialiased;
+      -moz-osx-font-smoothing: grayscale;
+      transition: background-color 0.3s ease, color 0.3s ease;
+    }
+
+    /* =============================================
+       ANNOUNCEMENT BAR — RULE 3.4, 5.5
+       Colored bar to grab attention (semantic purpose)
+       16px font, 20px line-height
+       ============================================= */
+    .announcement-bar {
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      gap: var(--space-2);
+      padding: var(--space-3) var(--space-4);
+      background: var(--announcement-bg);
+      border-bottom: 1px solid var(--border-color);
+      transition: background-color 0.3s ease, border-color 0.3s ease;
+    }
+
+    .announcement-dot {
+      width: 8px;
+      height: 8px;
+      border-radius: 50%;
+      background: var(--announcement-dot);
+      flex-shrink: 0;
+      animation: pulse-dot 2s ease-in-out infinite;
+    }
+
+    @keyframes pulse-dot {
+      0%, 100% { opacity: 1; transform: scale(1); }
+      50% { opacity: 0.6; transform: scale(0.85); }
+    }
+
+    .announcement-text {
+      font-size: var(--text-h5);  /* 16px — RULE 3.4 */
+      line-height: var(--space-5); /* 20px — RULE 3.4 */
+      font-weight: 500;
+      color: var(--announcement-text);
+      transition: color 0.3s ease;
+    }
+
+    .announcement-arrow {
+      font-size: var(--text-h6);
+      color: var(--announcement-text);
+      transition: transform var(--transition-fast), color 0.3s ease;
+    }
+
+    .announcement-bar:hover .announcement-arrow {
+      transform: translateX(3px);
+    }
+
+    .announcement-bar:hover {
+      cursor: pointer;
+    }
+
+    /* =============================================
+       DARK MODE TOGGLE — RULE 1.1, 1.2
+       Clear signifier for interactive toggle
+       ============================================= */
+    .toggle-wrapper {
+      position: fixed;
+      top: var(--space-4);
+      right: var(--space-6);
+      z-index: 100;
+      display: flex;
+      align-items: center;
+      gap: var(--space-2);
+    }
+
+    .toggle-label {
+      font-size: var(--text-h6);
+      color: var(--text-muted);
+      font-weight: 500;
+      transition: color 0.3s ease;
+      user-select: none;
+    }
+
+    .toggle-track {
+      width: 48px;
+      height: 28px;
+      background: var(--toggle-bg);
+      border-radius: 20px;
+      cursor: pointer;
+      position: relative;
+      transition: background-color 0.3s ease;
+      border: 1px solid var(--border-color);
+    }
+
+    .toggle-track:hover {
+      opacity: 0.85;
+    }
+
+    .toggle-track:active {
+      transform: scale(0.96);
+    }
+
+    .toggle-knob {
+      width: 20px;
+      height: 20px;
+      background: var(--toggle-knob);
+      border-radius: 50%;
+      position: absolute;
+      top: 3px;
+      left: 4px;
+      transition: transform 0.25s cubic-bezier(0.4, 0, 0.2, 1), background-color 0.3s ease;
+      box-shadow: 0 1px 3px rgba(0, 0, 0, 0.15);
+    }
+
+    [data-theme="dark"] .toggle-knob {
+      transform: translateX(20px);
+    }
+
+    .toggle-icon {
+      position: absolute;
+      top: 50%;
+      transform: translateY(-50%);
+      font-size: 14px;
+      line-height: 1;
+      transition: opacity 0.2s ease;
+    }
+
+    .toggle-icon--sun {
+      left: 6px;
+      opacity: 1;
+    }
+
+    .toggle-icon--moon {
+      right: 6px;
+      opacity: 0.5;
+    }
+
+    [data-theme="dark"] .toggle-icon--sun {
+      opacity: 0.5;
+    }
+
+    [data-theme="dark"] .toggle-icon--moon {
+      opacity: 1;
+    }
+
+    /* =============================================
+       HERO SECTION — RULE 2.1, 2.3, 3.3, 3.4, 3.5
+       Visual hierarchy: size, position, color
+       White space is king. Spacing as hierarchy.
+       ============================================= */
+    .hero {
+      display: flex;
+      flex-direction: column;
+      align-items: center;
+      text-align: center;
+      padding: 80px var(--space-6) 60px;
+      max-width: 860px;
+      margin: 0 auto;
+      /* RULE 3.3 — letting things breathe */
+    }
+
+    /* Text group: announcement + heading + subtitle (RULE 3.5 — tighter spacing) */
+    .hero-text-group {
+      display: flex;
+      flex-direction: column;
+      align-items: center;
+      gap: var(--space-4); /* 16px — grouped elements (RULE 3.4) */
+    }
+
+    /* =============================================
+       HERO HEADING — RULE 2.3, 4.3, 4.4
+       Largest, boldest, top position.
+       Letter-spacing hack: -2% to -3%, line-height 110-120%
+       ============================================= */
+    .hero-heading {
+      font-size: var(--text-h1); /* 64px — RULE 3.4 */
+      line-height: 72px;         /* 72px — RULE 3.4 */
+      font-weight: 700;
+      letter-spacing: -0.025em;  /* -2.5% — RULE 4.3 */
+      color: var(--text-primary);
+      max-width: 780px;
+      transition: color 0.3s ease;
+    }
+
+    .hero-heading .highlight {
+      color: var(--btn-primary-bg);
+      transition: color 0.3s ease;
+    }
+
+    /* =============================================
+       HERO SUBTITLE — RULE 2.4, 3.4
+       Smaller, muted, positioned below primary element.
+       20px font, 28px line-height
+       ============================================= */
+    .hero-subtitle {
+      font-size: var(--text-h4); /* 20px — RULE 3.4 */
+      line-height: var(--space-7); /* 28px — RULE 3.4 */
+      color: var(--text-secondary);
+      max-width: 560px;
+      font-weight: 400;
+      transition: color 0.3s ease;
+    }
+
+    /* =============================================
+       CTA BUTTONS — RULE 8.4, 8.5, 9.2
+       Primary + ghost pair. 2:1 padding ratio.
+       Minimum 4 states: default, hover, active, disabled.
+       ============================================= */
+    .hero-cta-group {
+      display: flex;
+      align-items: center;
+      gap: var(--space-4); /* 16px — grouped elements */
+      margin-top: var(--space-8); /* 32px — major section gap (RULE 3.4) */
+      flex-wrap: wrap;
+      justify-content: center;
+    }
+
+    .btn {
+      display: inline-flex;
+      align-items: center;
+      justify-content: center;
+      gap: var(--space-2);
+      font-family: 'DM Sans', system-ui, sans-serif;
+      font-size: var(--text-h5); /* 16px */
+      font-weight: 600;
+      border: none;
+      cursor: pointer;
+      border-radius: var(--space-3); /* 12px */
+      transition: all var(--transition-fast);
+      text-decoration: none;
+      white-space: nowrap;
+    }
+
+    /* Primary button (filled) — RULE 8.4, 8.5 */
+    .btn-primary {
+      padding: var(--space-4) var(--space-8); /* 16px 32px — 2:1 ratio (RULE 8.5) */
+      background: var(--btn-primary-bg);
+      color: var(--btn-primary-text);
+      /* Tactile raised effect (RULE 7.3) */
+      box-shadow:
+        0 2px 4px rgba(0, 0, 0, 0.12),
+        inset 0 1px 0 rgba(255, 255, 255, 0.15);
+    }
+
+    /* Hover state (RULE 9.2 — state 2) */
+    .btn-primary:hover {
+      background: var(--btn-primary-hover);
+      box-shadow:
+        0 4px 8px rgba(0, 0, 0, 0.15),
+        inset 0 1px 0 rgba(255, 255, 255, 0.15);
+      transform: translateY(-1px);
+    }
+
+    /* Active/pressed state (RULE 9.2 — state 3) */
+    .btn-primary:active {
+      background: var(--btn-primary-active);
+      box-shadow:
+        0 0 0 rgba(0, 0, 0, 0),
+        inset 0 2px 4px rgba(0, 0, 0, 0.15);
+      transform: translateY(1px);
+    }
+
+    /* Disabled state (RULE 9.2 — state 4) */
+    .btn-primary:disabled {
+      opacity: 0.5;
+      cursor: not-allowed;
+      pointer-events: none;
+    }
+
+    /* Ghost button (secondary) — RULE 8.2, 8.4 */
+    .btn-ghost {
+      padding: var(--space-4) var(--space-8); /* 16px 32px — 2:1 ratio (RULE 8.5) */
+      background: var(--btn-ghost-bg);
+      color: var(--btn-ghost-text);
+      border: 1.5px solid var(--btn-ghost-border);
+    }
+
+    .btn-ghost:hover {
+      background: var(--btn-ghost-hover);
+      border-color: var(--text-muted);
+    }
+
+    .btn-ghost:active {
+      transform: translateY(1px);
+      opacity: 0.85;
+    }
+
+    .btn-ghost:disabled {
+      opacity: 0.5;
+      cursor: not-allowed;
+      pointer-events: none;
+    }
+
+    /* Icon inside button — RULE 8.1: icon size = text line-height */
+    .btn-icon {
+      width: 20px;
+      height: 20px;
+      flex-shrink: 0;
+    }
+
+    /* =============================================
+       TRUSTED-BY LOGOS — RULE 2.6, 3.5
+       Lower hierarchy, muted, grouped spacing
+       ============================================= */
+    .trusted-section {
+      margin-top: 64px;
+      display: flex;
+      flex-direction: column;
+      align-items: center;
+      gap: var(--space-6); /* 24px */
+      width: 100%;
+    }
+
+    .trusted-label {
+      font-size: var(--text-h6); /* 14px */
+      font-weight: 500;
+      color: var(--text-muted);
+      text-transform: uppercase;
+      letter-spacing: 0.08em;
+      transition: color 0.3s ease;
+    }
+
+    .trusted-logos {
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      gap: var(--space-10); /* 40px */
+      flex-wrap: wrap;
+    }
+
+    .logo-item {
+      display: flex;
+      align-items: center;
+      gap: var(--space-2);
+      opacity: var(--logo-opacity);
+      transition: opacity 0.3s ease;
+      user-select: none;
+    }
+
+    .logo-item:hover {
+      opacity: var(--logo-hover-opacity);
+    }
+
+    /* SVG logo icons — sized to match text line-height (RULE 8.1) */
+    .logo-icon {
+      width: 24px;
+      height: 24px;
+      flex-shrink: 0;
+    }
+
+    .logo-icon svg {
+      width: 100%;
+      height: 100%;
+      fill: var(--text-primary);
+      transition: fill 0.3s ease;
+    }
+
+    .logo-name {
+      font-size: var(--text-h5); /* 16px */
+      font-weight: 600;
+      color: var(--text-primary);
+      letter-spacing: -0.01em;
+      transition: color 0.3s ease;
+    }
+
+    /* =============================================
+       RESPONSIVE — RULE 3.2
+       Adjust type scale for smaller viewports
+       ============================================= */
+    @media (max-width: 768px) {
+      .hero {
+        padding: 60px var(--space-5) 48px;
+      }
+
+      .hero-heading {
+        font-size: var(--text-h2); /* 42px */
+        line-height: 48px;
+      }
+
+      .hero-subtitle {
+        font-size: var(--text-h5); /* 16px */
+        line-height: var(--space-6); /* 24px */
+      }
+
+      .trusted-logos {
+        gap: var(--space-6); /* 24px */
+      }
+
+      .toggle-wrapper {
+        top: var(--space-2);
+        right: var(--space-4);
+      }
+
+      .trusted-section {
+        margin-top: 48px;
+      }
+    }
+
+    @media (max-width: 480px) {
+      .hero-heading {
+        font-size: var(--text-h3); /* 32px */
+        line-height: 40px;
+      }
+
+      .hero-cta-group {
+        flex-direction: column;
+        width: 100%;
+      }
+
+      .btn-primary,
+      .btn-ghost {
+        width: 100%;
+        justify-content: center;
+      }
+
+      .trusted-logos {
+        gap: var(--space-5); /* 20px */
+      }
+
+      .logo-name {
+        font-size: var(--text-h6); /* 14px */
+      }
+    }
+  </style>
+</head>
+<body>
+
+  <!-- Dark mode toggle (RULE 1.2 — selection signifier, RULE 9.1 — feedback) -->
+  <div class="toggle-wrapper">
+    <span class="toggle-label">Theme</span>
+    <div class="toggle-track" id="themeToggle" role="switch" aria-checked="false" aria-label="Toggle dark mode" tabindex="0">
+      <span class="toggle-icon toggle-icon--sun" aria-hidden="true">&#9728;</span>
+      <span class="toggle-icon toggle-icon--moon" aria-hidden="true">&#9790;</span>
+      <div class="toggle-knob"></div>
+    </div>
+  </div>
+
+  <!-- Announcement bar (RULE 5.5 — color with purpose to grab attention) -->
+  <div class="announcement-bar" role="banner">
+    <span class="announcement-dot" aria-hidden="true"></span>
+    <span class="announcement-text">Introducing Smart Reminders</span>
+    <span class="announcement-arrow" aria-hidden="true">&#8594;</span>
+  </div>
+
+  <!-- Hero section -->
+  <section class="hero">
+
+    <!-- Text group — 16px gap between grouped elements (RULE 3.5) -->
+    <div class="hero-text-group">
+
+      <!-- Heading — biggest, boldest, top (RULE 2.1, 2.3) -->
+      <h1 class="hero-heading">
+        Track deadlines.<br><span class="highlight">Get paid on time.</span>
+      </h1>
+
+      <!-- Subtitle — smaller, muted, below heading (RULE 2.4) -->
+      <p class="hero-subtitle">
+        Breakout keeps your projects on track with smart deadline management, automated reminders, and real-time status updates your whole team can see.
+      </p>
+    </div>
+
+    <!-- CTA group — 32px above (RULE 3.4), primary + ghost pair (RULE 8.4) -->
+    <div class="hero-cta-group">
+
+      <!-- Primary CTA (RULE 8.4, 8.5 — filled, 2:1 padding) -->
+      <button class="btn btn-primary" type="button">
+        Start free trial
+        <!-- Arrow icon — sized to match line-height (RULE 8.1) -->
+        <svg class="btn-icon" viewBox="0 0 20 20" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+          <path d="M4 10h12M12 5l5 5-5 5"/>
+        </svg>
+      </button>
+
+      <!-- Ghost CTA (RULE 8.2, 8.4) -->
+      <button class="btn btn-ghost" type="button">
+        <!-- Play icon -->
+        <svg class="btn-icon" viewBox="0 0 20 20" fill="currentColor">
+          <path d="M6.5 4.2a1 1 0 0 1 1.04.04l8 5.5a1 1 0 0 1 0 1.64l-8 5.02A1 1 0 0 1 6 15.52V4.98a1 1 0 0 1 .5-.78Z"/>
+        </svg>
+        Watch demo
+      </button>
+    </div>
+
+    <!-- Trusted-by logos — lower visual hierarchy (RULE 2.1, 2.4) -->
+    <div class="trusted-section">
+      <span class="trusted-label">Trusted by teams at</span>
+      <div class="trusted-logos">
+
+        <!-- Logo 1: Stripe -->
+        <div class="logo-item">
+          <div class="logo-icon">
+            <svg viewBox="0 0 24 24"><path d="M13.976 9.15c-2.172-.806-3.356-1.426-3.356-2.409 0-.831.683-1.305 1.901-1.305 2.227 0 4.515.858 6.09 1.631l.89-5.494C18.252.975 15.697 0 12.165 0 9.667 0 7.589.654 6.104 1.872 4.56 3.147 3.757 4.992 3.757 7.218c0 4.039 2.467 5.76 6.476 7.219 2.585.92 3.445 1.574 3.445 2.583 0 .98-.84 1.545-2.354 1.545-1.875 0-4.965-.921-6.99-2.109l-.9 5.555C5.175 22.99 8.385 24 11.714 24c2.641 0 4.843-.624 6.328-1.813 1.664-1.305 2.525-3.236 2.525-5.732 0-4.128-2.524-5.851-6.591-7.305z"/></svg>
+          </div>
+          <span class="logo-name">Stripe</span>
+        </div>
+
+        <!-- Logo 2: Notion -->
+        <div class="logo-item">
+          <div class="logo-icon">
+            <svg viewBox="0 0 24 24"><path d="M4.459 4.208c.746.606 1.026.56 2.428.466l13.215-.793c.28 0 .047-.28-.046-.326L17.86 1.968c-.42-.326-.98-.7-2.055-.607L2.84 2.298c-.466.046-.56.28-.373.466l1.992 1.444zm.793 3.172v13.893c0 .746.373 1.026 1.213.98l14.523-.84c.84-.046.932-.56.932-1.166V6.354c0-.606-.233-.932-.746-.886l-15.176.886c-.56.046-.746.326-.746.886v.14zm14.336.42c.093.42 0 .84-.42.886l-.7.14v10.264c-.606.326-1.166.513-1.632.513-.746 0-.932-.233-1.492-.932l-4.572-7.182v6.95l1.446.326s0 .84-1.166.84l-3.218.186c-.093-.186 0-.653.326-.746l.84-.233V8.62L7.39 8.48c-.093-.42.14-1.026.793-1.073l3.451-.233 4.758 7.275v-6.437l-1.213-.14c-.093-.512.28-.886.746-.932l3.451-.186.047-.14h-.047l.046.14z"/></svg>
+          </div>
+          <span class="logo-name">Notion</span>
+        </div>
+
+        <!-- Logo 3: Linear -->
+        <div class="logo-item">
+          <div class="logo-icon">
+            <svg viewBox="0 0 24 24"><path d="M2.654 10.6a.48.48 0 0 0-.103.503l2.648 7.238a3.6 3.6 0 0 0 .663 1.098l7.304-8.839H2.654zM7.1 20.677c.33.193.7.323 1.088.373l10.384-12.56H12.88L7.1 20.677zm12.617-10.96L14.06 2.7a3.6 3.6 0 0 0-1.27-.9L5.31 10.6h10.488l3.92-1.183-.001.3zM20.7 11.463l-3.972 4.803.166.452 2.648 7.238c.19.518.72.78 1.238.59a.96.96 0 0 0 .503-.503l2.648-7.238a9.6 9.6 0 0 0-.002-6.856l-2.648-7.238a.96.96 0 0 0-1.741 0l-.84 2.296 2 5.456z"/></svg>
+          </div>
+          <span class="logo-name">Linear</span>
+        </div>
+
+        <!-- Logo 4: Vercel -->
+        <div class="logo-item">
+          <div class="logo-icon">
+            <svg viewBox="0 0 24 24"><path d="M12 1L24 22H0L12 1z"/></svg>
+          </div>
+          <span class="logo-name">Vercel</span>
+        </div>
+
+        <!-- Logo 5: Figma -->
+        <div class="logo-item">
+          <div class="logo-icon">
+            <svg viewBox="0 0 24 24"><path d="M8 24c2.2 0 4-1.8 4-4v-4H8c-2.2 0-4 1.8-4 4s1.8 4 4 4zm-4-16c0-2.2 1.8-4 4-4h4v8H8c-2.2 0-4-1.8-4-4zm0-8c0-2.2 1.8-4 4-4h4v8H8C5.8 4 4 2.2 4 0zm8-4h4c2.2 0 4 1.8 4 4s-1.8 4-4 4h-4V-4zm8 12c0 2.2-1.8 4-4 4s-4-1.8-4-4 1.8-4 4-4 4 1.8 4 4z"/></svg>
+          </div>
+          <span class="logo-name">Figma</span>
+        </div>
+
+      </div>
+    </div>
+
+  </section>
+
+  <!-- JavaScript for dark mode toggle -->
+  <script>
+    const toggle = document.getElementById('themeToggle');
+    const html = document.documentElement;
+
+    function setTheme(theme) {
+      html.setAttribute('data-theme', theme);
+      toggle.setAttribute('aria-checked', theme === 'dark' ? 'true' : 'false');
+    }
+
+    // Check system preference on load
+    if (window.matchMedia && window.matchMedia('(prefers-color-scheme: dark)').matches) {
+      setTheme('dark');
+    }
+
+    // Toggle on click
+    toggle.addEventListener('click', function () {
+      const current = html.getAttribute('data-theme');
+      setTheme(current === 'dark' ? 'light' : 'dark');
+    });
+
+    // Toggle on keyboard (Enter / Space) for accessibility
+    toggle.addEventListener('keydown', function (e) {
+      if (e.key === 'Enter' || e.key === ' ') {
+        e.preventDefault();
+        toggle.click();
+      }
+    });
+  </script>
+
+</body>
+</html>

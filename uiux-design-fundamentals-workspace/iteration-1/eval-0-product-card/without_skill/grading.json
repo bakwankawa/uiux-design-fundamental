@@ -1,0 +1,37 @@
+{
+  "eval_id": 0,
+  "eval_name": "product-card",
+  "configuration": "without_skill",
+  "expectations": [
+    {
+      "text": "Title (Burrito Bowl) uses a larger or bolder font than secondary text (time, location)",
+      "passed": true,
+      "evidence": ".card-title has font-size: 20px and font-weight: 700, while secondary text like .card-restaurant is 14px/500, .route-point-value is 15px/600, and .schedule-text is 14px/600. The title is the largest and boldest."
+    },
+    {
+      "text": "Price ($32.45) uses a non-black color (e.g., blue) and is visually separated from the title",
+      "passed": false,
+      "evidence": ".card-price has color: #1a1a2e, which is a very dark navy that is essentially black/near-black, not a distinct non-black color like blue or green. It is visually separated via flex space-between positioning, but fails the non-black color requirement."
+    },
+    {
+      "text": "Spacing values (margin, padding, gap) are multiples of 4px",
+      "passed": false,
+      "evidence": "Multiple spacing values are not multiples of 4px: .delivery-route has gap: 14px and padding: 18px, .route-line has padding-top: 2px, .route-details has gap: 14px, .route-point-label has margin-bottom: 2px, .schedule has gap: 10px and padding: 14px 18px, .order-btn has padding: 14px, .badge has padding: 5px 12px and top/left: 14px, .card-restaurant has margin-top: 3px."
+    },
+    {
+      "text": "Card uses box-shadow with low opacity (rgba alpha <= 0.15) not a heavy dark shadow",
+      "passed": true,
+      "evidence": ".card box-shadow uses rgba(0, 0, 0, 0.08) and rgba(0, 0, 0, 0.04). Both alpha values are well below the 0.15 threshold."
+    },
+    {
+      "text": "An image element or image placeholder div appears before/above the text content",
+      "passed": true,
+      "evidence": "The .card-image div (with gradient background, emoji food icon &#127838;, and 'Burrito Bowl' label) is the first child of .card, appearing before .card-body which contains all text content."
+    },
+    {
+      "text": "Location info uses visual indicators (SVG icons, emoji pins, symbols) not just plain text labels",
+      "passed": true,
+      "evidence": "The delivery route section uses colored circular dots (.route-dot: 10px red circle for origin, .route-dot.destination: 10px green circle for delivery) connected by a dashed line (.route-connector) as visual indicators alongside the location text. These colored geometric shapes serve as visual origin/destination markers."
+    }
+  ]
+}

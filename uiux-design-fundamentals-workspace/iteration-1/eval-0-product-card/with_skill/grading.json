@@ -1,0 +1,37 @@
+{
+  "eval_id": 0,
+  "eval_name": "product-card",
+  "configuration": "with_skill",
+  "expectations": [
+    {
+      "text": "Title (Burrito Bowl) uses a larger or bolder font than secondary text (time, location)",
+      "passed": true,
+      "evidence": ".card-title has font-size: 20px and font-weight: 700, while secondary text like .card-subtitle is 14px, .route-location is 16px/600, and .schedule-detail is 14px. The title is clearly the largest and boldest text element."
+    },
+    {
+      "text": "Price ($32.45) uses a non-black color (e.g., blue) and is visually separated from the title",
+      "passed": true,
+      "evidence": ".card-price has color: #3b82f6 (blue) and is placed inside .card-header with justify-content: space-between, positioning it to the right of the title group, providing clear visual separation."
+    },
+    {
+      "text": "Spacing values (margin, padding, gap) are multiples of 4px",
+      "passed": false,
+      "evidence": "Multiple spacing values are not multiples of 4px: .route-icons has padding: 2px 0, .route-point has gap: 2px, .schedule-chip has gap: 6px and padding: 6px 12px (6 is not a multiple of 4), .card-button has padding: 14px 28px (14 is not a multiple of 4)."
+    },
+    {
+      "text": "Card uses box-shadow with low opacity (rgba alpha <= 0.15) not a heavy dark shadow",
+      "passed": true,
+      "evidence": ".card box-shadow uses rgba(0, 0, 0, 0.06) and rgba(0, 0, 0, 0.04). Both alpha values (0.06 and 0.04) are well below the 0.15 threshold. Hover state uses rgba(0, 0, 0, 0.08), also under 0.15."
+    },
+    {
+      "text": "An image element or image placeholder div appears before/above the text content",
+      "passed": true,
+      "evidence": "The .card-image div (containing an SVG bowl icon and 'Food Delivery' label with a gradient background) is the first child of .card, appearing before .card-body which contains all text content."
+    },
+    {
+      "text": "Location info uses visual indicators (SVG icons, emoji pins, symbols) not just plain text labels",
+      "passed": true,
+      "evidence": "The route section uses two SVG map pin icons (.route-pin.origin in orange #f97316 and .route-pin.destination in green #22c55e) with full SVG path data for pin shapes, connected by a dotted line (.route-dotted-line), alongside the location text."
+    }
+  ]
+}

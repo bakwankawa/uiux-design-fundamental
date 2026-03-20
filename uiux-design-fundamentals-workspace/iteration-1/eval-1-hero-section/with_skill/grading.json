@@ -1,0 +1,37 @@
+{
+  "eval_id": 1,
+  "eval_name": "hero-section",
+  "configuration": "with_skill",
+  "expectations": [
+    {
+      "text": "Hero heading has negative letter-spacing (e.g., -0.02em, -0.03em, -2%, or similar negative value)",
+      "passed": true,
+      "evidence": ".hero-heading has letter-spacing: -0.025em (line 310), which is a negative value equivalent to -2.5%."
+    },
+    {
+      "text": "Hero heading line-height is between 1.0 and 1.25 (or 100%-125%, or a tight absolute value)",
+      "passed": true,
+      "evidence": ".hero-heading has font-size: var(--text-h1) = 64px and line-height: 72px (line 308). 72/64 = 1.125, which falls within the 1.0-1.25 range."
+    },
+    {
+      "text": "One filled/solid button and one transparent/outline/ghost button are present side by side",
+      "passed": true,
+      "evidence": ".btn-primary has background: var(--btn-primary-bg) (solid fill, line 368). .btn-ghost has background: var(--btn-ghost-bg) which resolves to transparent (line 78), with border: 1.5px solid var(--btn-ghost-border) (line 406). Both buttons are in .hero-cta-group with display: flex and gap: 16px, placing them side by side."
+    },
+    {
+      "text": "Grouped elements have tighter spacing (e.g., 16px) than section-level gaps (e.g., 32px or larger)",
+      "passed": true,
+      "evidence": ".hero-text-group uses gap: var(--space-4) = 16px for grouped heading+subtitle (line 298). Section-level gaps are larger: .hero-cta-group has margin-top: var(--space-8) = 32px (line 344), and .trusted-section has margin-top: 64px (line 437). Clear 16px grouped vs 32px-64px section-level hierarchy."
+    },
+    {
+      "text": "Dark mode uses lighter surface colors for cards/sections than the page background (not shadows for depth)",
+      "passed": true,
+      "evidence": "[data-theme='dark'] sets --surface-bg: #0f0f14 (page background) and --surface-card: #1a1a24 (card surface), which is lighter (lines 94-95). Additionally, all shadow variables are explicitly set to 'none' in dark mode (lines 117-120: --shadow-sm/md/lg/xl: none), confirming depth is conveyed through surface color, not shadows."
+    },
+    {
+      "text": "Announcement bar uses a smaller font size than the heading and has distinct visual treatment (color, border, or background)",
+      "passed": true,
+      "evidence": ".announcement-text has font-size: var(--text-h5) = 16px (line 172). .hero-heading has font-size: var(--text-h1) = 64px (line 307). 16px < 64px. Distinct visual treatment: background: var(--announcement-bg) = var(--primary-50) = hsl(250, 80%, 97%) (line 153), border-bottom: 1px solid var(--border-color) (line 153), and colored text via var(--announcement-text) = var(--primary-700) (line 175)."
+    }
+  ]
+}
