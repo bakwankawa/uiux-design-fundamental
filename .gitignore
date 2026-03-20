@@ -1,12 +1,12 @@
-# Ignore large video file
+# Source materials (not part of the skill)
 *.mp4
+transcript.md
 
-# Ignore generated review viewer
-uiux-design-fundamentals-workspace/iteration-*/review.html
-
-# Ignore unrelated workspace projects
-uiux-design-fundamentals-workspace/supplAI/
-**/node_modules/
+# Development workspace
+uiux-design-fundamentals-workspace/
 
 # Claude project config
 .claude/
+
+# Skill guide PDF
+skill guide/
