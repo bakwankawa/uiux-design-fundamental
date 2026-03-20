@@ -104,6 +104,17 @@ body {
   border-radius: 12px;
 }
 
+/* Tab item base */
+.tab-item {
+  display: flex;
+  align-items: center;
+  gap: 8px;
+  padding: 8px 16px;
+  border-radius: 8px;
+  cursor: pointer;
+  transition: background-color 0.15s ease;
+}
+
 /* Selected state */
 .tab-item.active {
   background: #ffffff;
@@ -150,6 +161,7 @@ body {
 .card-subtitle {
   font-size: 14px;
   color: #888;
+  line-height: 1.4;
 }
 
 .card-price {
@@ -301,7 +313,7 @@ body {
 /* Button states */
 .button:hover  { filter: brightness(1.1); }
 .button:active { filter: brightness(0.9); transform: translateY(1px); }
-.button:disabled {
+.button:disabled, .button[aria-disabled="true"] {
   opacity: 0.5;
   cursor: not-allowed;
   pointer-events: none;
@@ -367,10 +379,34 @@ button, a, input, select, textarea {
   opacity: 0;
   transition: opacity 0.2s ease, transform 0.2s ease;
   pointer-events: none;
+  white-space: nowrap;
 }
 .copied-chip.visible {
   opacity: 1;
   transform: translateX(-50%) translateY(0);
+}
+```
+
+### React Pattern for Copy Confirmation
+
+```jsx
+function CopyButton({ text }) {
+  const [copied, setCopied] = useState(false);
+
+  const handleCopy = async () => {
+    await navigator.clipboard.writeText(text);
+    setCopied(true);
+    setTimeout(() => setCopied(false), 2000);
+  };
+
+  return (
+    <div style={{ position: 'relative' }}>
+      <button onClick={handleCopy}>{text}</button>
+      <span className={`copied-chip ${copied ? 'visible' : ''}`}>
+        <CheckIcon /> Copied!
+      </span>
+    </div>
+  );
 }
 ```
 
@@ -383,6 +419,12 @@ button, a, input, select, textarea {
   position: relative;
   border-radius: 16px;
   overflow: hidden;
+}
+
+.image-card img {
+  width: 100%;
+  height: 100%;
+  object-fit: cover;
 }
 
 /* Linear gradient (GOOD) */
@@ -408,12 +450,16 @@ button, a, input, select, textarea {
     transparent 65%
   );
   backdrop-filter: blur(0px);
+  -webkit-backdrop-filter: blur(0px);
   mask-image: linear-gradient(to top, black 0%, black 30%, transparent 70%);
+  -webkit-mask-image: linear-gradient(to top, black 0%, black 30%, transparent 70%);
 }
 
 .image-card .content {
   position: absolute;
   bottom: 0;
+  left: 0;
+  right: 0;
   padding: 24px;
   color: #fff;
   z-index: 1;

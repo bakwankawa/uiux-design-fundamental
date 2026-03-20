@@ -184,6 +184,7 @@ Text over images needs careful treatment.
 - Use more than 6 font sizes
 - Add color for decoration without purpose
 - Keep default letter-spacing on large headings
+- Leave the user uncertain whether their action succeeded
 
 ### ALWAYS DO
 - Use containers/grouping to show element relationships
@@ -200,13 +201,24 @@ Text over images needs careful treatment.
 - Use 2:1 padding ratio on buttons
 - Use semantic colors (blue=trust, red=danger, green=success, yellow=warning)
 - Build color ramps from one primary color
+- Use images in cards/content whenever possible for visual scanning
 - Apply `transition: 0.15s ease` to all interactive elements
 
 ---
 
 ## REFERENCE VALUES
 
-**Fonts:** DM Sans, Axiforma, SF Pro, Geist, Plus Jakarta Sans, Montserrat, Unbounded
+**Fonts:**
+
+| Font | Character |
+|------|-----------|
+| DM Sans | Geometric, clean, versatile |
+| Axiforma | Rounded, friendly |
+| SF Pro | Apple system font, neutral |
+| Geist | Modern, Vercel's font |
+| Plus Jakarta Sans | Geometric, versatile |
+| Montserrat | Classic, widely available |
+| Unbounded | Bold, display/decorative |
 
 **Landing page scale:** 64px, 42px, 32px, 20px, 16px, 14px
 
